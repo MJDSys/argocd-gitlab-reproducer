@@ -1,0 +1,81 @@
+global:
+  appConfig:
+    object_store:
+      enabled: true
+      connection:
+        secret: redacted
+        key: minio
+  hpa:
+    apiVersion: autoscaling/v2
+    minReplicas: 1
+  pdb:
+    apiVersion: policy/v1
+  edition: ce
+  hosts:
+    domain: example
+  ingress:
+    apiVersion: networking.k8s.io/v1
+    class: nginx
+    configureCertmanager: false
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+  kas:
+    enabled: false
+  minio:
+    enabled: false
+  pages:
+    enabled: true
+    externalHttp:
+      - 0.0.0.0
+    objectStore:
+      enabled: true
+      connection:
+        secret: redacted
+        key: minio
+gitlab:
+  webservice:
+    hpa:
+      minReplicas: 1
+    ingress:
+      proxyBodySize: 4G
+      tls:
+        secretName: redacted
+  kas:
+    ingress:
+      tls:
+        secretName: redacted
+  gitlab-shell:
+    minReplicas: 1
+  gitlab-pages:
+    useHTTPProxy: true
+    ingress:
+      enabled: false
+    service:
+      customDomains:
+        type: ClusterIP
+  toolbox:
+    backups:
+      objectStorage:
+        config:
+          secret: redacted
+          key: minio-s3cmd
+  migrations:
+    annotations:
+      argocd.argoproj.io/hook: Sync
+registry:
+  hpa:
+    minReplicas: 1
+  storage:
+    secret: redacted
+    key: minio-registry
+  ingress:
+    tls:
+      secretName: redacted
+certmanager:
+  install: false
+gitlab-runner:
+  install: false
+nginx-ingress:
+  enabled: false
+prometheus:
+  install: false
